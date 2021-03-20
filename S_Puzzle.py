@@ -24,6 +24,8 @@ def convertToMatrix(string, columns):
             state.append(row)
     print(state)
 
+start_state = "612783549"
+convertToMatrix(start_state, 3)
 convertToMatrix(goal_state, 3)
 
 
