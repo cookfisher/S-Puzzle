@@ -1,5 +1,13 @@
 import time
 
+
+class Node:
+    def __init__(self, puzzle, parent, depth, cost):
+        self.puzzle = puzzle
+        self.parent = parent
+        self.depth = depth
+        self.cost = cost
+
 def convertToMatrix(string, columns):
     # slicing strings
     #temp = [string[idx: idx + rows] for idx in range(0, len(string), rows)]
@@ -38,7 +46,7 @@ def move_up(puzzle, row, column):
     new_puzzle = [x[:] for x in puzzle]
     if row != 0:
         new_puzzle[row][column], new_puzzle[row-1][column] = new_puzzle[row-1][column], new_puzzle[row][column]
-        print(new_puzzle)
+        #print(new_puzzle)
         return new_puzzle
     else:
         return None
@@ -47,7 +55,7 @@ def move_down(puzzle, row, column):
     new_puzzle = [x[:] for x in puzzle]
     if row != len(puzzle)-1:
         new_puzzle[row][column], new_puzzle[row+1][column] = new_puzzle[row+1][column], new_puzzle[row][column]
-        print(new_puzzle)
+        #print(new_puzzle)
         return new_puzzle
     else:
         return None
@@ -56,7 +64,7 @@ def move_left(puzzle, row, column):
     new_puzzle = [x[:] for x in puzzle]
     if column != 0:
         new_puzzle[row][column], new_puzzle[row][column-1] = new_puzzle[row][column-1], new_puzzle[row][column]
-        print(new_puzzle)
+        #print(new_puzzle)
         return new_puzzle
     else:
         return None
@@ -65,12 +73,12 @@ def move_right(puzzle, row, column):
     new_puzzle = [x[:] for x in puzzle]
     if column != len(puzzle[0])-1:
         new_puzzle[row][column], new_puzzle[row][column+1] = new_puzzle[row][column+1], new_puzzle[row][column]
-        print(new_puzzle)
+        #print(new_puzzle)
         return new_puzzle
     else:
         return None
 
-def findChildNode(parent_node):
+def findChildNodes(parent_node):
     puzzle = parent_node.puzzle
     #print(puzzle)
     rows = len(puzzle)
@@ -83,7 +91,7 @@ def findChildNode(parent_node):
 
     for row in range(rows):
         for column in range(columns):
-            print("Puzzle", puzzle[row][column])
+            #print("Puzzle", puzzle[row][column])
             #if row == 1 and column == 1:
             child_node = create_node(move_up(puzzle, row, column), parent_node, parent_node.depth+1, 0)
             child_nodes.append(child_node)
@@ -94,7 +102,6 @@ def findChildNode(parent_node):
             child_node = create_node(move_right(puzzle, row, column), parent_node, parent_node.depth + 1, 0)
             child_nodes.append(child_node)
 
-
     child_nodes = [node for node in child_nodes if node.puzzle is not None]
     print("Total", len(child_nodes), "possibilities")
     return child_nodes
@@ -104,45 +111,72 @@ def create_node(puzzle, parent, depth, cost):
     return Node(puzzle, parent, depth, cost)
 
 
-class Node:
-    def __init__(self, puzzle, parent, depth, cost):
-        self.puzzle = puzzle
-        self.parent = parent
-        self.depth = depth
-        self.cost = cost
+puzzle_dict = []
+def dfs(start, goal):
+    openList = []
+    closeList = []
+    depth_limit = 5000
 
-    def dfs(start, goal):
-        openList = []
-        openList.append(start)
+    start_node = create_node(start,None,0,0)
+    openList.append(start_node)
 
-        closeList = []
+    # timing
+    start_time = time.time()
 
-        depth_limit = 5000
-
-        start_time = time.time()
-        while len(openList) > 0:
-            elapsed_time = time.time() - start_time
-            if elapsed_time < 60:
-                # get a current state node
-                node = openList.pop(0)
-                if node.puzzle == goal:
-                    print(node.puzzle)
-                    return "Find solution"
+    while len(openList) > 0:
+        elapsed_time = time.time() - start_time
+        if elapsed_time < 600000:
+            # get left most node
+            current_node = openList.pop()
+            closeList.append(current_node)
+            # check if find goal puzzle
+            if current_node.puzzle == goal:
+                print(current_node.puzzle)
+                path = []
+                temp = current_node
+                print(temp.depth)
+                #while True:
+                    #path.insert(0, temp.operator)
+                    #if temp.depth <= 1: break
+                    #temp = temp.parent
+                #return path
+                return "Find solution"
             else:
-                return 'No solution'
+                child_nodes = findChildNodes(current_node)
+                for node in child_nodes:
+                    puzzle_str = "".join(element for sub in node.puzzle for element in sub) #(str(n) for n in node.puzzle)
+                    # TODO check if it's in closeList
+                    if puzzle_str in puzzle_dict:
+                        print("in")
+                        continue
+                    else:
+                        # TODO check if it's already in openList
+                        puzzle_dict.append(puzzle_str)
+                        print(puzzle_str)
+                        openList.append(node)
+        else:
+            return 'No solution'
 
 
+def convertMatrixToString(puzzle):
+    puzzle_str = "".join(element for sub in puzzle for element in sub)
+    print(puzzle_str)
 
-start_state = "612783549"
-#goal_state = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-goal_state = '123456789'
-start_state = "612783549"
-goal = convertToMatrix(goal_state, 3)
-current_state = convertToMatrix(start_state, 3)
+#start_state = "612783549"
+start_state = "2314"
+
+#goal_state = '123456789'
+goal_state = "1234"
+
+goal = convertToMatrix(goal_state, 2)
+start_puzzle = convertToMatrix(start_state, 2)
 print()
 
-node = create_node(current_state,None,0,0)
+node = create_node(start_puzzle,None,0,0)
+findChildNodes(node)
 
-move_up(current_state, 1, 1)
-print("Find child node")
-findChildNode(node)
+#move_up(start_puzzle, 1, 1)
+#print("Find child node")
+
+convertMatrixToString(start_puzzle)
+dfs(start_puzzle,goal)
