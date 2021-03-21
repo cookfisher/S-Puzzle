@@ -1,12 +1,11 @@
 import time
 
-
 class Node:
-    def __init__(self, puzzle, parent, depth, cost):
+    def __init__(self, puzzle, parent, depth, heuristic):
         self.puzzle = puzzle
         self.parent = parent
         self.depth = depth
-        self.cost = cost
+        self.heuristic = heuristic
 
 def convertToMatrix(string, columns):
     # slicing strings
@@ -85,14 +84,9 @@ def findChildNodes(parent_node):
     columns = len(puzzle[0])
     child_nodes = []
 
-    #for i in puzzle:
-        #for j in i:
-            #print(j)
-
     for row in range(rows):
         for column in range(columns):
             #print("Puzzle", puzzle[row][column])
-            #if row == 1 and column == 1:
             child_node = create_node(move_up(puzzle, row, column), parent_node, parent_node.depth+1, 0)
             child_nodes.append(child_node)
             child_node = create_node(move_down(puzzle, row, column), parent_node, parent_node.depth + 1, 0)
@@ -103,7 +97,7 @@ def findChildNodes(parent_node):
             child_nodes.append(child_node)
 
     child_nodes = [node for node in child_nodes if node.puzzle is not None]
-    print("Total", len(child_nodes), "possibilities")
+    #print("Total", len(child_nodes), "possibilities")
     return child_nodes
 
 
@@ -120,15 +114,21 @@ def dfs(start, goal):
     start_node = create_node(start,None,0,0)
     openList.append(start_node)
 
+    puzzle_str = "".join(element for sub in start_node.puzzle for element in sub)
+    puzzle_dict.append(puzzle_str)
+
     # timing
     start_time = time.time()
 
     while len(openList) > 0:
+        #print("OpenList", len(openList))
+        #print("CloseList", len(closeList))
         elapsed_time = time.time() - start_time
         if elapsed_time < 600000:
             # get left most node
             current_node = openList.pop()
             closeList.append(current_node)
+
             # check if find goal puzzle
             if current_node.puzzle == goal:
                 print(current_node.puzzle)
@@ -144,17 +144,18 @@ def dfs(start, goal):
             else:
                 child_nodes = findChildNodes(current_node)
                 for node in child_nodes:
-                    puzzle_str = "".join(element for sub in node.puzzle for element in sub) #(str(n) for n in node.puzzle)
-                    # TODO check if it's in closeList
+                    puzzle_str = "".join(element for sub in node.puzzle for element in sub)
+                    # check if it's in closeList
                     if puzzle_str in puzzle_dict:
-                        print("in")
+                        #print("in")
                         continue
                     else:
-                        # TODO check if it's already in openList
+                        # check if it's already in openList
                         puzzle_dict.append(puzzle_str)
                         print(puzzle_str)
                         openList.append(node)
         else:
+            print("No solution")
             return 'No solution'
 
 
@@ -172,11 +173,8 @@ goal = convertToMatrix(goal_state, 2)
 start_puzzle = convertToMatrix(start_state, 2)
 print()
 
-node = create_node(start_puzzle,None,0,0)
-findChildNodes(node)
-
-#move_up(start_puzzle, 1, 1)
-#print("Find child node")
+#node = create_node(start_puzzle,None,0,0)
+#findChildNodes(node)
 
 convertMatrixToString(start_puzzle)
-dfs(start_puzzle,goal)
+dfs(start_puzzle, goal)
