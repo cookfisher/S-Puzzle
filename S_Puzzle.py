@@ -135,22 +135,25 @@ def dfs(start, goal):
                 path = []
                 temp = current_node
                 print(temp.depth)
-                #while True:
-                    #path.insert(0, temp.operator)
-                    #if temp.depth <= 1: break
-                    #temp = temp.parent
-                #return path
-                return "Find solution"
+                while True:
+                    current_str = convertMatrixToString(temp.puzzle)
+                    path.insert(0, current_str)
+                    if temp.depth <= 0:
+                        break
+                    temp = temp.parent
+
+                print("Find solution")
+                print(path)
+                return path
             else:
                 child_nodes = findChildNodes(current_node)
                 for node in child_nodes:
                     puzzle_str = "".join(element for sub in node.puzzle for element in sub)
-                    # check if it's in closeList
+                    # check if it's in closeList & openList
                     if puzzle_str in puzzle_dict:
                         #print("in")
                         continue
                     else:
-                        # check if it's already in openList
                         puzzle_dict.append(puzzle_str)
                         print(puzzle_str)
                         openList.append(node)
@@ -161,7 +164,7 @@ def dfs(start, goal):
 
 def convertMatrixToString(puzzle):
     puzzle_str = "".join(element for sub in puzzle for element in sub)
-    print(puzzle_str)
+    return puzzle_str
 
 #start_state = "612783549"
 start_state = "2314"
