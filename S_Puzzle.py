@@ -133,9 +133,10 @@ def dfs(start, goal):
         elapsed_time = time.time() - start_time
         if elapsed_time < 600000:
             # get left most node
-            index = heuristic1(openList, goal)
+            # index = heuristic1(openList, goal)
+            index = heuristic2(openList)
             current_node = openList.pop(index)
-            #current_node = openList.pop()
+            # current_node = openList.pop()
             closeList.append(current_node)
 
             # check if find goal puzzle
@@ -190,7 +191,8 @@ def matrixToPosition(puzzle):
     return poslist
 
 
-def heuristic1(openlist,goal):
+# using manhattan distance
+def heuristic1(openlist, goal):
     goal_poslist = matrixToPosition(goal)
     index = 0
     min_estimation = 10000
@@ -210,8 +212,32 @@ def heuristic1(openlist,goal):
                     estimation = abs(row_g-row_p)+abs(column_g-column_p)
                     total_estimation += estimation
 
-        if total_estimation<min_estimation:
+        if total_estimation < min_estimation:
             min_estimation = total_estimation
+            index = openlist.index(node)
+
+    return index
+
+
+# using sum of permutation inversions
+def heuristic2(openlist):
+    index = 0
+    min_sum = 10000
+
+    for node in openlist:
+        puzzle = node.puzzle
+        puzzle_poslist = matrixToPosition(puzzle)
+        sum = 0
+
+        for element_current in puzzle_poslist:
+            char_current = element_current.character
+            for element_next in puzzle_poslist:
+                char_next = element_next.character
+                if puzzle_poslist.index(element_next) > puzzle_poslist.index(element_current) and char_current > char_next:
+                    sum += 1
+
+        if min_sum > sum:
+            min_sum = sum
             index = openlist.index(node)
 
     return index

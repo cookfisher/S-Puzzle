@@ -75,23 +75,49 @@ def heuristic1(openlist,goal):
 
     return index
 
+def heuristic2(openlist):
+    index = 0
+    min_sum = 10000
+
+    for node in openlist:
+        #puzzle = node.puzzle
+        puzzle_poslist = matrixToPosition(node)
+        sum = 0
+
+        for element_current in puzzle_poslist:
+            char_current = element_current.character
+            for element_next in puzzle_poslist:
+                char_next = element_next.character
+                if puzzle_poslist.index(element_next) > puzzle_poslist.index(element_current) and char_current > char_next:
+                    sum += 1
+
+        if min_sum > sum:
+            min_sum = sum
+            index = openlist.index(node)
+
+    return index
+
 
 #start_state = "612783549"
 start_state1 = "2314"
 start_state2 = "2134"
 start_state3 = "2143"
+start_state4 = "4321"
 
 #goal_state = '123456789'
 goal_state = "1234"
 
 goal = convertToMatrix(goal_state, 2)
 start_puzzle1 = convertToMatrix(start_state1, 2)
-start_puzzle2 = convertToMatrix(start_state3, 2)
-start_puzzle3 = convertToMatrix(start_state2, 2)
+start_puzzle2 = convertToMatrix(start_state2, 2)
+start_puzzle3 = convertToMatrix(start_state3, 2)
+start_puzzle4 = convertToMatrix(start_state4, 2)
 
 openlist = []
-openlist.append(start_puzzle1)
 openlist.append(start_puzzle2)
+openlist.append(start_puzzle1)
 openlist.append(start_puzzle3)
+openlist.append(start_puzzle4)
 
-print(heuristic1(openlist, goal))
+# print(heuristic1(openlist, goal))
+print(heuristic2(openlist))
