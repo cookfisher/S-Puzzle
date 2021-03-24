@@ -126,8 +126,8 @@ def dfs(start, goal):
     start_time = time.time()
 
     while len(openList) > 0:
-        print("OpenList", len(openList))
-        print("CloseList", len(closeList))
+        #print("OpenList", len(openList))
+        #print("CloseList", len(closeList))
         elapsed_time = time.time() - start_time
         if elapsed_time < 60:
             # get left most node
@@ -149,6 +149,8 @@ def dfs(start, goal):
                     temp = temp.parent
 
                 print(path)
+                elapsed_time = time.time() - start_time
+                print(elapsed_time)
                 return path
             else:
                 child_nodes = findChildNodes(current_node)
@@ -194,6 +196,7 @@ def iterativeDeepening(start, goal):
 
             # check if find goal puzzle
             if current_node.puzzle == goal:
+                print("Find solution")
                 print(current_node.puzzle)
                 path = []
                 temp = current_node
@@ -205,8 +208,9 @@ def iterativeDeepening(start, goal):
                         break
                     temp = temp.parent
 
-                print("Find solution")
                 print(path)
+                elapsed_time = time.time() - start_time
+                print(elapsed_time)
                 return path
             else:
                 if current_node.depth < depth_limit:
