@@ -1,4 +1,26 @@
 import time
+import re
+import ast
+from csv import reader
+
+def load_inputs(path):
+    with open('input_puzzles.csv', 'r') as f:
+        csv_reader = reader(f)
+        list_rows = list(csv_reader)
+        input_list = []
+        for row in list_rows[1:]:
+            initial = parse_input(row[0].strip())
+            goal = parse_input(row[1].strip())
+            t = [initial, goal]
+            input_list.append(t)
+    return input_list
+
+def parse_input(x):
+    x = re.sub('\(', '[', x)
+    x = re.sub('\)', ']', x)
+    x = re.sub(';', ',', x)
+    x = ast.literal_eval(x)
+    return x
 
 class Node:
     def __init__(self, puzzle, parent, depth, heuristic):
@@ -203,7 +225,7 @@ def dfs(start, goal, file1, file2):
                         continue
                     else:
                         puzzle_dict.append(puzzle_str)
-                        print(puzzle_str)
+                        #print(puzzle_str)
                         openList.append(node)
         else:
             print("No solution")
@@ -290,7 +312,7 @@ def iterativeDeepening(start, goal, file1, file2):
                             continue
                         else:
                             puzzle_dict.append(puzzle_str)
-                            print(puzzle_str)
+                            #print(puzzle_str)
                             openList.append(node)
 
                 if len(openList) == 0:
@@ -413,7 +435,7 @@ def matrixToPosition(puzzle):
 
 
 def convertMatrixToString(puzzle):
-    puzzle_str = ";".join(element for sub in puzzle for element in sub)
+    puzzle_str = ";".join(str(element) for sub in puzzle for element in sub)
     return puzzle_str
 
 
@@ -471,12 +493,14 @@ def heuristic2(openlist):
 
 #start_state = "2314"
 #goal_state = "1234"
-start_state = "612783549"
-goal_state = '123456789'
+#start_state = "612783549"
+#goal_state = '123456789'
+#goal = convertToMatrix(goal_state, 3)
+#start_puzzle = convertToMatrix(start_state, 3)
+#print()
 
-goal = convertToMatrix(goal_state, 3)
-start_puzzle = convertToMatrix(start_state, 3)
-print()
+path = 'input_puzzles.csv'
+input_puzzles = load_inputs(path)
 
 # output
 output_DFS_solution = open("Output_DFS_solution.txt", "w")
@@ -491,13 +515,13 @@ output_h1_search = open("Output_h1_search.txt", "w")
 output_h2_solution = open("Output_h2_solution.txt", "w")
 output_h2_search = open("Output_h2_search.txt", "w")
 
-dfs(start_puzzle, goal, output_DFS_solution, output_DFS_search)
-
-iterativeDeepening(start_puzzle, goal, output_Depth_solution, output_Depth_search)
-
-AStar(start_puzzle, goal, 1, output_h1_solution, output_h1_search)
-
-AStar(start_puzzle, goal, 2, output_h2_solution, output_h2_search)
+for puzzle in input_puzzles:
+    start_puzzle, goal = puzzle
+    print(start_puzzle)
+    #dfs(start_puzzle, goal, output_DFS_solution, output_DFS_search)
+    iterativeDeepening(start_puzzle, goal, output_Depth_solution, output_Depth_search)
+    #AStar(start_puzzle, goal, 1, output_h1_solution, output_h1_search)
+    #AStar(start_puzzle, goal, 2, output_h2_solution, output_h2_search)
 
 output_DFS_solution.close()
 output_DFS_search.close()
