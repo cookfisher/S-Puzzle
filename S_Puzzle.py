@@ -145,7 +145,7 @@ def dfs(start, goal, file1, file2):
     output_one(file2, start_node.puzzle)
     file2.write("\n")
 
-    puzzle_str = "".join(element for sub in start_node.puzzle for element in sub)
+    puzzle_str = convertMatrixToString(start_node.puzzle)
     puzzle_dict.append(puzzle_str)
 
     # timing
@@ -196,7 +196,7 @@ def dfs(start, goal, file1, file2):
             else:
                 child_nodes = findChildNodes(current_node)
                 for node in child_nodes:
-                    puzzle_str = "".join(element for sub in node.puzzle for element in sub)
+                    puzzle_str = convertMatrixToString(node.puzzle)
                     # check if it's in closeList & openList
                     if puzzle_str in puzzle_dict:
                         #print("in")
@@ -230,7 +230,7 @@ def iterativeDeepening(start, goal, file1, file2):
     output_one(file2, start_node.puzzle)
     file2.write("\n")
 
-    puzzle_str = "".join(element for sub in start_node.puzzle for element in sub)
+    puzzle_str = convertMatrixToString(start_node.puzzle)
     puzzle_dict.append(puzzle_str)
 
     # timing
@@ -283,7 +283,7 @@ def iterativeDeepening(start, goal, file1, file2):
                     print("Depth = ", current_node.depth)
                     child_nodes = findChildNodes(current_node)
                     for node in child_nodes:
-                        puzzle_str = "".join(element for sub in node.puzzle for element in sub)
+                        puzzle_str = convertMatrixToString(node.puzzle)
                         # check if it's in closeList & openList
                         if puzzle_str in puzzle_dict:
                             #print("in")
@@ -325,7 +325,7 @@ def AStar(start, goal, heuristic, file1, file2):
     output_one(file2, start_node.puzzle)
     file2.write("\n")
 
-    puzzle_str = "".join(element for sub in start_node.puzzle for element in sub)
+    puzzle_str = convertMatrixToString(start_node.puzzle)
     puzzle_list.append(puzzle_str)
 
     # timing
@@ -382,7 +382,7 @@ def AStar(start, goal, heuristic, file1, file2):
             else:
                 child_nodes = findChildNodes(current_node)
                 for node in child_nodes:
-                    puzzle_str = "".join(element for sub in node.puzzle for element in sub)
+                    puzzle_str = convertMatrixToString(node.puzzle)
                     # check if it's in closeList & openList
                     if puzzle_str in puzzle_list:
                         #print("in")
@@ -413,7 +413,7 @@ def matrixToPosition(puzzle):
 
 
 def convertMatrixToString(puzzle):
-    puzzle_str = "".join(element for sub in puzzle for element in sub)
+    puzzle_str = ";".join(element for sub in puzzle for element in sub)
     return puzzle_str
 
 
