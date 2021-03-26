@@ -85,3 +85,4 @@ print('The goal matrix is', g)
 #AStar(start_puzzle, goal, 1)
 #depth_first.AStar(s, g, 1)
 """
+
