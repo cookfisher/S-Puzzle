@@ -1,11 +1,15 @@
-import numpy as np
-#import depth_first
+import depth_first
+import random
 
 def generate_input_matrix(n):
     # choice method can generate unique number, randint can't
     #matrix = np.random.choice(range(1,n*n+1,1), (n,n), replace=False)
-    matrix = np.random.choice(range(1, n * n + 1, 1), n*n, replace=False)
-    print(matrix)
+    #matrix = np.random.choice(range(1, n * n + 1, 1), n*n, replace=False)
+    #matrix = list(range(1, n * n + 1))
+    matrix = list(range(1, n * n + 1))
+    random_matrix = random.shuffle(matrix)
+    #matrix = random.shuffle(list(range(1, n * n + 1)))
+    print(random_matrix)
 
     input_matrix = []
     temp_list = []
@@ -73,7 +77,7 @@ def generate_goal_matrix(n):
 
     return goal_matrix
 
-"""
+
 n = 4
 s = generate_input_matrix(n)
 g = generate_goal_matrix(n)
@@ -83,6 +87,4 @@ print('The goal matrix is', g)
 #goal = depth_first.convertToMatrix(g, 4)
 
 #AStar(start_puzzle, goal, 1)
-#depth_first.AStar(s, g, 1)
-"""
-
+depth_first.AStar(s, g, 1)
