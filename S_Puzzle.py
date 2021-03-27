@@ -229,8 +229,8 @@ def dfs(start, goal, file1, file2):
                         openList.append(node)
         else:
             print("No solution")
-            file1.write("Solution Path: No solution, run out of states\n\n")
-            file2.write("Search Path: No solution, run out of states\n\n")
+            file1.write("Solution Path: No solution, run out of time\n\n")
+            file2.write("Search Path: No solution, run out of time\n\n")
             return 'No solution'
 
 
@@ -411,7 +411,7 @@ def AStar(start, goal, heuristic, file1, file2):
                         continue
                     else:
                         puzzle_list.append(puzzle_str)
-                        print(puzzle_str)
+                        #print(puzzle_str)
                         openList.append(node)
         else:
             print("No solution")
