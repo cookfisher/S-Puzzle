@@ -513,7 +513,7 @@ output_h1_search = open("Output_h1_search.txt", "w")
 output_h2_solution = open("Output_h2_solution.txt", "w")
 output_h2_search = open("Output_h2_search.txt", "w")
 
-index = 1
+
 dfs_total_solution_path = 0
 dfs_total_search_path = 0
 dfs_total_num_no_solution = 0
@@ -535,8 +535,11 @@ astar2_total_num_no_solution = 0
 astar2_total_execution_time = 0
 
 n=3
+index = 1
+puzzle_range = 20
+limit_time = 60
 
-for index in range(21):
+for index in range(puzzle_range):
     # output
     output_DFS_solution = open("{order}_Output_DFS_solution.txt".format(order=index), "w")
     output_DFS_search = open("{order}_Output_DFS_search.txt".format(order=index), "w")
@@ -569,16 +572,16 @@ for index in range(21):
         iter_total_search_path = iter_total_search_path + len(iterative_search_path)
         iter_total_solution_path = iter_total_solution_path + len(iterative_path)
 
-    if AStar(start_puzzle, goal, 1, output_h1_solution, output_h1_search) == '':
-        astar1_total_num_no_solution = astar2_total_num_no_solution + 1
+    if AStar(start_puzzle, goal, 1, output_h1_solution, output_h1_search) == 'No solution':
+        astar1_total_num_no_solution = astar1_total_num_no_solution + 1
     else:
         aStar1_path, aStar1_execution_time, aStar1_search_path = AStar(start_puzzle, goal, 1, output_h1_solution,
                                                                        output_h1_search)
         astar1_total_execution_time = astar1_total_execution_time + aStar1_execution_time
         astar1_total_search_path = astar1_total_search_path + len(aStar1_search_path)
-        astar2_total_solution_path = astar2_total_solution_path + len(aStar1_path)
+        astar1_total_solution_path = astar1_total_solution_path + len(aStar1_path)
 
-    if AStar(start_puzzle, goal, 2, output_h2_solution, output_h2_search) == '':
+    if AStar(start_puzzle, goal, 2, output_h2_solution, output_h2_search) == 'No solution':
         astar2_total_num_no_solution = astar2_total_num_no_solution + 1
     else:
         aStar2_path, aStar2_execution_time, aStar2_search_path = AStar(start_puzzle, goal, 2, output_h2_solution,
@@ -588,32 +591,101 @@ for index in range(21):
         astar2_total_search_path = astar2_total_search_path + len(aStar2_search_path)
 
 ###################################################################
+analysis = open('analysis_Report.txt','w')
+
 print('###################################################################')
 print('The puzzle is {n1} * {n2}'.format(n1=n, n2=n))
 print('The input puzzle is {p}'.format(p=start_puzzle))
 print('The goal puzzle is {g}'.format(g=goal))
 print('###################################################################')
-print('DFS execution total time is{total} and average time is {avg}'.format(total=dfs_total_execution_time, avg=dfs_total_execution_time / (20 - dfs_total_num_no_solution)))
-print('The length of DFS solution path: total is {total} and average is {avg}'.format(total=dfs_total_solution_path, avg=dfs_total_solution_path/ (20 - dfs_total_num_no_solution)))
-print('The length of DFS search path: total is {total} and average is {avg}'.format(total=dfs_total_search_path, avg=dfs_total_search_path/ (20 - dfs_total_num_no_solution)))
+if dfs_total_num_no_solution == puzzle_range:
+    print('DFS execution total time is{total} and average time is {avg}'.format(total=limit_time*puzzle_range,
+                                                                                avg=puzzle_range))
+else:
+    print('DFS execution total time is{total} and average time is {avg}'.format(total=dfs_total_execution_time,
+                                                                                avg=dfs_total_execution_time / (
+                                                                                            puzzle_range - dfs_total_num_no_solution)))
+    print('The length of DFS solution path: total is {total} and average is {avg}'.format(total=dfs_total_solution_path,
+                                                                                          avg=dfs_total_solution_path / (
+                                                                                                      puzzle_range - dfs_total_num_no_solution)))
+    print('The length of DFS search path: total is {total} and average is {avg}'.format(total=dfs_total_search_path,
+                                                                                        avg=dfs_total_search_path / (
+                                                                                                    puzzle_range - dfs_total_num_no_solution)))
+
 print('The number of DFS with no solution is', dfs_total_num_no_solution)
 ###################################################################
-print('IterativeDeepening execution total time is{total} and average time is {avg}'.format(total=iter_total_execution_time, avg=iter_total_execution_time / (20 - iter_total_num_no_solution)))
-print('The length of IterativeDeepening solution path: total is {total} and average is {avg}'.format(total=iter_total_solution_path, avg=iter_total_solution_path/ (20 - iter_total_num_no_solution)))
-print('The length of IterativeDeepening search path: total is {total} and average is {avg}'.format(total=iter_total_search_path, avg=iter_total_search_path/ (20 - iter_total_num_no_solution)))
+if iter_total_num_no_solution == puzzle_range:
+    print('IterativeDeepening execution total time is{total} and average time is {avg}'.format(
+        total=limit_time * puzzle_range,
+        avg=puzzle_range))
+else:
+    print('IterativeDeepening execution total time is{total} and average time is {avg}'.format(
+        total=iter_total_execution_time,
+        avg=iter_total_execution_time / (puzzle_range - iter_total_num_no_solution)))
+    print('The length of IterativeDeepening solution path: total is {total} and average is {avg}'.format(
+        total=iter_total_solution_path, avg=iter_total_solution_path / (puzzle_range - iter_total_num_no_solution)))
+    print('The length of IterativeDeepening search path: total is {total} and average is {avg}'.format(
+        total=iter_total_search_path, avg=iter_total_search_path / (puzzle_range - iter_total_num_no_solution)))
+
 print('The number of IterativeDeepening with no solution is', iter_total_num_no_solution)
 ###################################################################
-print('AStar 1 execution total time is{total} and average time is {avg}'.format(total=astar1_total_execution_time, avg=astar1_total_execution_time / (20 - astar1_total_num_no_solution)))
-print('The length of AStar 1 solution path: total is {total} and average is {avg}'.format(total=astar1_total_solution_path, avg=astar1_total_solution_path/ (20 - astar1_total_num_no_solution)))
-print('The length of AStar 1 search path: total is {total} and average is {avg}'.format(total=astar1_total_search_path, avg=astar1_total_search_path/ (20 - astar1_total_num_no_solution)))
+print('AStar 1 execution total time is{total} and average time is {avg}'.format(total=astar1_total_execution_time, avg=astar1_total_execution_time / (puzzle_range - astar1_total_num_no_solution)))
+print('The length of AStar 1 solution path: total is {total} and average is {avg}'.format(total=astar1_total_solution_path, avg=astar1_total_solution_path/ (puzzle_range - astar1_total_num_no_solution)))
+print('The length of AStar 1 search path: total is {total} and average is {avg}'.format(total=astar1_total_search_path, avg=astar1_total_search_path/ (puzzle_range - astar1_total_num_no_solution)))
 print('The number of AStar 1 with no solution is', astar1_total_num_no_solution)
 ###################################################################
-print('AStar 2 execution total time is{total} and average time is {avg}'.format(total=astar2_total_execution_time, avg=astar2_total_execution_time / (20 - astar2_total_num_no_solution)))
-print('The length of AStar 2 solution path: total is {total} and average is {avg}'.format(total=astar2_total_solution_path, avg=astar2_total_solution_path/ (20 - astar2_total_num_no_solution)))
-print('The length of AStar 2 search path: total is {total} and average is {avg}'.format(total=astar2_total_search_path, avg=astar2_total_search_path/ (20 - astar2_total_num_no_solution)))
+print('AStar 2 execution total time is{total} and average time is {avg}'.format(total=astar2_total_execution_time, avg=astar2_total_execution_time / (puzzle_range - astar2_total_num_no_solution)))
+print('The length of AStar 2 solution path: total is {total} and average is {avg}'.format(total=astar2_total_solution_path, avg=astar2_total_solution_path/ (puzzle_range - astar2_total_num_no_solution)))
+print('The length of AStar 2 search path: total is {total} and average is {avg}'.format(total=astar2_total_search_path, avg=astar2_total_search_path/ (puzzle_range - astar2_total_num_no_solution)))
 print('The number of  2 with no solution is', astar2_total_num_no_solution)
 ###################################################################
 
+analysis.write('###################################################################')
+analysis.write('The puzzle is {n1} * {n2}'.format(n1=n, n2=n))
+analysis.write('The input puzzle is {p}'.format(p=start_puzzle))
+analysis.write('The goal puzzle is {g}'.format(g=goal))
+analysis.write('###################################################################')
+if dfs_total_num_no_solution == puzzle_range:
+    analysis.write('DFS execution total time is{total} and average time is {avg}'.format(total=limit_time*puzzle_range,
+                                                                                avg=puzzle_range))
+else:
+    analysis.write('DFS execution total time is{total} and average time is {avg}'.format(total=dfs_total_execution_time,
+                                                                                avg=dfs_total_execution_time / (
+                                                                                            puzzle_range - dfs_total_num_no_solution)))
+    analysis.write('The length of DFS solution path: total is {total} and average is {avg}'.format(total=dfs_total_solution_path,
+                                                                                          avg=dfs_total_solution_path / (
+                                                                                                      puzzle_range - dfs_total_num_no_solution)))
+    analysis.write('The length of DFS search path: total is {total} and average is {avg}'.format(total=dfs_total_search_path,
+                                                                                        avg=dfs_total_search_path / (
+                                                                                                    puzzle_range - dfs_total_num_no_solution)))
+
+analysis.write('The number of DFS with no solution is', dfs_total_num_no_solution)
+###################################################################
+if iter_total_num_no_solution == puzzle_range:
+    analysis.write('IterativeDeepening execution total time is{total} and average time is {avg}'.format(
+        total=limit_time * puzzle_range,
+        avg=puzzle_range))
+else:
+    analysis.write('IterativeDeepening execution total time is{total} and average time is {avg}'.format(
+        total=iter_total_execution_time,
+        avg=iter_total_execution_time / (puzzle_range - iter_total_num_no_solution)))
+    analysis.write('The length of IterativeDeepening solution path: total is {total} and average is {avg}'.format(
+        total=iter_total_solution_path, avg=iter_total_solution_path / (puzzle_range - iter_total_num_no_solution)))
+    analysis.write('The length of IterativeDeepening search path: total is {total} and average is {avg}'.format(
+        total=iter_total_search_path, avg=iter_total_search_path / (puzzle_range - iter_total_num_no_solution)))
+
+analysis.write('The number of IterativeDeepening with no solution is', iter_total_num_no_solution)
+###################################################################
+analysis.write('AStar 1 execution total time is{total} and average time is {avg}'.format(total=astar1_total_execution_time, avg=astar1_total_execution_time / (puzzle_range - astar1_total_num_no_solution)))
+analysis.write('The length of AStar 1 solution path: total is {total} and average is {avg}'.format(total=astar1_total_solution_path, avg=astar1_total_solution_path/ (puzzle_range - astar1_total_num_no_solution)))
+analysis.write('The length of AStar 1 search path: total is {total} and average is {avg}'.format(total=astar1_total_search_path, avg=astar1_total_search_path/ (puzzle_range - astar1_total_num_no_solution)))
+analysis.write('The number of AStar 1 with no solution is', astar1_total_num_no_solution)
+###################################################################
+analysis.write('AStar 2 execution total time is{total} and average time is {avg}'.format(total=astar2_total_execution_time, avg=astar2_total_execution_time / (puzzle_range - astar2_total_num_no_solution)))
+analysis.write('The length of AStar 2 solution path: total is {total} and average is {avg}'.format(total=astar2_total_solution_path, avg=astar2_total_solution_path/ (puzzle_range - astar2_total_num_no_solution)))
+analysis.write('The length of AStar 2 search path: total is {total} and average is {avg}'.format(total=astar2_total_search_path, avg=astar2_total_search_path/ (puzzle_range - astar2_total_num_no_solution)))
+analysis.write('The number of  2 with no solution is', astar2_total_num_no_solution)
+###################################################################
 
 output_DFS_solution.close()
 output_DFS_search.close()
