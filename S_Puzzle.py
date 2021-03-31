@@ -538,10 +538,10 @@ for puzzle in input_puzzles:
     #start_puzzle, goal = puzzle
     start_puzzle = puzzle
     print(start_puzzle)
-    #dfs(start_puzzle, goal, output_DFS_solution, output_DFS_search)
+    dfs(start_puzzle, goal, output_DFS_solution, output_DFS_search)
     iterativeDeepening(start_puzzle, goal, output_Depth_solution, output_Depth_search)
-    #AStar(start_puzzle, goal, 1, output_h1_solution, output_h1_search)
-    #AStar(start_puzzle, goal, 2, output_h2_solution, output_h2_search)
+    AStar(start_puzzle, goal, 1, output_h1_solution, output_h1_search)
+    AStar(start_puzzle, goal, 2, output_h2_solution, output_h2_search)
 
 output_DFS_solution.close()
 output_DFS_search.close()
