@@ -1,4 +1,4 @@
-import S_Puzzle
+import depth_first
 import random
 
 def generate_input_matrix(n):
@@ -87,9 +87,4 @@ print('The goal matrix is', g)
 #goal = depth_first.convertToMatrix(g, 4)
 
 #AStar(start_puzzle, goal, 1)
-
-output_h1_solution = open("Output_h1_solution.txt", "w")
-output_h1_search = open("Output_h1_search.txt", "w")
-S_Puzzle.AStar(s, g, 1,output_h1_solution,output_h1_search)
-output_h1_solution.close()
-output_h1_search.close()
+depth_first.AStar(s, g, 1)
