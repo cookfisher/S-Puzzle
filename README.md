@@ -1,7 +1,7 @@
 # S-Puzzle
 To implement and analyze a variety of search algorithms to solve S-Puzzle
 
-[Please Edit the Demo PPT](https://docs.google.com/presentation/d/1x19LpRkrHkIm93Ko9_npsAKaAeLQfjgYCBS3SyoA6GM/edit?usp=sharing)
+[Please Edit the Demo PPT]()
 </br>
 </br>
 Task List:
